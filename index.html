@@ -26,15 +26,37 @@
             <form class="form">
                 <div>
                     <label>Название заметки
-                    <input class="input-title" type="text" placeholder="Напишите название новой заметки...">
-                </label>
+                        <input class="input-title" type="text" placeholder="Напишите название новой заметки...">
+                    </label>
                 </div>
                 <div>
                     <label for="note-description">Описание новой заметки
-                    <!-- <input type="text" placeholder="Напишите описание новой заметки..."> -->
-                </label>
-                <textarea id="note-description" class="input-description" placeholder="Напишите описание новой заметки..."></textarea>
+                        <!-- <input type="text" placeholder="Напишите описание новой заметки..."> -->
+                    </label>
+                    <textarea id="note-description" class="input-description"
+                        placeholder="Напишите описание новой заметки..."></textarea>
                 </div>
+                <fieldset class="fieldset">
+                    <legend class="label">Выберите цвет заметки</legend>
+                    <ul class="radio-list">
+                        <li>
+                            <input checked class="yellow" type="radio" name="color" value="yellow"
+                                aria-label="yellow" />
+                        </li>
+                        <li>
+                            <input class="red" type="radio" name="color" value="red" aria-label="red" />
+                        </li>
+                        <li>
+                            <input class="green" type="radio" name="color" value="green" aria-label="green" />
+                        </li>
+                        <li>
+                            <input class="blue" type="radio" name="color" value="blue" aria-label="blue" />
+                        </li>
+                        <li>
+                            <input class="purple" type="radio" name="color" value="purple" aria-label="purple" />
+                        </li>
+                    </ul>
+                </fieldset>
                 <div>
                     <button class="button">
                         <img src="./assets/images/plus-svgrepo-com 1.png" alt="">
@@ -42,27 +64,6 @@
                     </button>
                 </div>
             </form>
-            <div class="colors">
-                <H2 class="title">Выберите цвет заметки</H2>
-                <ul class="color-items">
-                    <li class="selected">
-                        <div class="circle blue"></div>
-                    </li>
-                    <li>
-                        <div class="circle green"></div>
-                    </li>
-                    <li>
-                        <div class="circle red"></div>
-                    </li>
-                    <li>
-                        <div class="circle black"></div>
-                    </li>
-                    <li>
-                        <div class="circle yellow"></div>
-                    </li>
-                </ul>
-            </div>
-            
         </div>
         <div>
             <label for="favorites-filter">
@@ -72,14 +73,14 @@
         </div>
         <div class="filter-box">
             <!-- Ваш код -->
-          </div>
-          <ul class="notes-list">
+        </div>
+        <ul class="notes-list">
             <!-- Сюда будут рендерится заметки из JavaScript -->
-          </ul>
-       
-          <div class="messages-box">
-            <!-- Сюда будут рендерится информационные сообщения из JavaScript -->
-          </div>
+        </ul>
+
+        <div class="message-box">
+
+        </div>
     </section>
     <script src="index.js"></script>
 </body>

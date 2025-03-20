@@ -4,7 +4,81 @@
     margin: 0px;
 }
 
-html,
-body {
-    
+.message-box {
+    height: 48px;
+    padding: 14px 24px 14px 26px;
+    display: none;
+    gap: 2px;
+    border-radius: 10px;
+    align-items: center;
+    position: fixed;
+    right: 64px;
+    bottom: 72px;
+}
+
+.message-box img {
+    height: 24px;
+    width: 24px;
+}
+
+.message-box p {
+    font-size: 14px;
+}
+
+.message-box.success {
+    display: flex;
+    background-color: #47b27d;
+}
+
+.message-box.error {
+    display: flex;
+    background-color: red;
+}
+
+input[type="radio"]::before {
+   content: "";
+   height: 24px; 
+   width: 24px;
+   border-radius: 50%;
+   position: relative;
+   background-color: #f3db7d;
+   display: inline-block;
+   top: -50%;
+   left: -50%;
+}
+
+input[type="radio"].red::before, .note.red {
+    background-color: #f37d7d;
+}
+
+input[type="radio"].green::before, .note.green {
+    background-color: #c2f37d;
+}
+
+input[type="radio"].blue::before, .note.blue {
+    background-color: #7de1f3;
+}
+
+input[type="radio"].purple::before, .note.purple {
+    background-color: #e77df3;
+}
+.radio-list li {
+    display: inline;
+    margin: 6px;
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+}
+
+input[type="radio"]:checked:before {
+    border: 1.5px solid #457cdc;
+}
+
+.note {
+    height: 216px;
+    width: 368px;
+}
+
+.note.yellow {
+    background-color: #f3db7d;
 }

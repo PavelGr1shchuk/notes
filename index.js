@@ -6,22 +6,71 @@ const MOCK_NOTES = [{
     isFavorite: false,
 }, ]
 
+const colors = {
+    GREEN: 'green',
+    BLUE: 'blue',
+    RED: 'red',
+    YELLOW: 'yellow',
+    PURPLE: 'purple',
+}
+
+const statuses = {
+    SUCCESS: 'success',
+    ERROR: 'error',
+}
+
+const successMessage = `<img src="/assets/images/Vector.svg" alt="succcess">
+                        <p>Заметка добавлена</p>`
+
+const deleteMessage = `<p>Заметка удалена</p>`
+
+const titleErrorMessage = `<img src="/assets/images/Vector-4.svg" alt="error">
+                        <p>Максимальная длина заголовка - 50 символов</p>`
+
+const descErrorMessage = `<img src="/assets/images/Vector-4.svg" alt="error">
+                        <p>Максимальная длина описания - 500 символов</p>`
+
+const requiredMessage = `<p>Заполните все поля</p>`
+
+let selectedColor;
+
 const model = {
     notes: [],
     showFavorites: false,
-    addNote(title, description) {
+    addNote(title, description, color = 'yellow') {
+        if (title.length > 50) {
+            view.renderPopup(statuses.ERROR, titleErrorMessage)
+            view.renderForm(title, description)
+            return 
+        }
+        if (description.length > 500) {
+            view.renderPopup(statuses.ERROR, descErrorMessage)
+            view.renderForm(title, description)
+            return 
+        }
+        if (title === "" || description === "") {
+            view.renderPopup(statuses.ERROR, requiredMessage)
+            view.renderForm(title, description)
+            return 
+        }
+    
+
         const id = Math.random()
         const newNote = {
             id,
             title,
-            description
+            description,
+            color
         }
         this.notes.unshift(newNote)
         view.renderNotes(this.notes, this.showFavorites)
+        view.renderPopup(statuses.SUCCESS, successMessage)
+        view.renderForm("", "")
     },
     deleteNotes(id) {
         this.notes = this.notes.filter((note) => note.id !== id)
         view.renderNotes(this.notes)
+        view.renderPopup(statuses.SUCCESS, deleteMessage)
     },
     addToFavorites(id) {
         const note = this.notes.find(item => item.id === id)
@@ -36,13 +85,11 @@ const model = {
     }
 }
 
-const colors = {
-    GREEN: 'green',
-    BLUE: 'blue',
-    RED: 'red',
-    YELLOW: 'yellow',
-    PURPLE: 'purple',
-}
+const form = document.querySelector('.form')
+const inputTitle = document.querySelector('.input-title')
+const inputDescription = document.querySelector('.input-description')
+const radioButtons = document.querySelector('.radio-list')
+const favoritesFilter = document.getElementById("favorites-filter")
 
 const view = {
     init() {
@@ -57,7 +104,7 @@ const view = {
 
         for (const note of visibleNotes) {
             notesHTML += `
-            <li id="${note.id}" class="note">
+            <li id="${note.id}" class="note ${note.color}">
               <b class="note-title">${note.title}</b>
               <p class="note-description">${note.description}</p>
                <button class="favorites-button" type="button"><img src="${note.isFavorite ? "assets/images/heart-active.png" : "assets/images/heart-inactive.png"}" alt="favorites"></button>
@@ -72,23 +119,33 @@ const view = {
         if (!notes.length) {
             list.innerHTML = "<p class='empty-message'>У вас ещё нет ни одной заметки. Заполните поля выше и создайте свою первую заметку!</p>"
         }
+    },
+    renderPopup(className, innerHTML) {
+        const messageBox = document.querySelector(".message-box")
+        messageBox.classList.add(className)
+        messageBox.innerHTML = innerHTML
+
+        setTimeout(() => {
+            messageBox.classList.remove(className)
+            messageBox.innerHTML = "";
+        }, 3000)
+    },
+    renderForm(title, description) {
+        const firsRadioButton = document.querySelector(".yellow")
+      inputTitle.value = title
+      inputDescription.value = description
+    if (title === "" || description === "") {
+        firsRadioButton.checked = true
+    }
     }
 }
 
-
-const form = document.querySelector('.form')
-const inputTitle = document.querySelector('.input-title')
-const inputDescription = document.querySelector('.input-description')
-const favoritesFilter = document.getElementById("favorites-filter")
 
 form.addEventListener("submit", function (event) {
     event.preventDefault()
     const title = inputTitle.value
     const description = inputDescription.value
-    controller.addNote(title, description)
-
-    inputTitle.value = ''
-    inputDescription.value = ''
+    controller.addNote(title, description, selectedColor)
 })
 
 const list = document.querySelector(".notes-list")
@@ -106,6 +163,10 @@ favoritesFilter.addEventListener("click", function (e) {
 })
 
 
+radioButtons.addEventListener('click', function (e) {
+   selectedColor = e.target.value;
+})
+
 
 
 
@@ -113,8 +174,8 @@ favoritesFilter.addEventListener("click", function (e) {
 
 
 const controller = {
-    addNote(title, description) {
-        model.addNote(title, description)
+    addNote(title, description, color) {
+        model.addNote(title, description, color)
     },
     deleteNotes(id) {
         model.deleteNotes(id)
