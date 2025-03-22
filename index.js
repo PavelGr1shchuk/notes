@@ -32,35 +32,34 @@ const descErrorMessage = `<img src="/assets/images/Vector-4.svg" alt="error">
 
 const requiredMessage = `<p>Заполните все поля</p>`
 
-let selectedColor;
-
 const model = {
     notes: [],
     showFavorites: false,
-    addNote(title, description, color = 'yellow') {
+    selectedColor: colors.YELLOW,
+    addNote(title, description) {
         if (title.length > 50) {
             view.renderPopup(statuses.ERROR, titleErrorMessage)
             view.renderForm(title, description)
-            return 
+            return
         }
         if (description.length > 500) {
             view.renderPopup(statuses.ERROR, descErrorMessage)
             view.renderForm(title, description)
-            return 
+            return
         }
         if (title === "" || description === "") {
             view.renderPopup(statuses.ERROR, requiredMessage)
             view.renderForm(title, description)
-            return 
+            return
         }
-    
+
 
         const id = Math.random()
         const newNote = {
             id,
             title,
             description,
-            color
+            color: this.selectedColor
         }
         this.notes.unshift(newNote)
         view.renderNotes(this.notes, this.showFavorites)
@@ -82,6 +81,9 @@ const model = {
     filterFavorites(showFavorites) {
         this.showFavorites = showFavorites;
         view.renderNotes(this.notes, showFavorites);
+    },
+    setSelectedColor(color) {
+        this.selectedColor = color;
     }
 }
 
@@ -132,11 +134,12 @@ const view = {
     },
     renderForm(title, description) {
         const firsRadioButton = document.querySelector(".yellow")
-      inputTitle.value = title
-      inputDescription.value = description
-    if (title === "" || description === "") {
-        firsRadioButton.checked = true
-    }
+        inputTitle.value = title
+        inputDescription.value = description
+        if (title === "" || description === "") {
+            firsRadioButton.checked = true
+            model.setSelectedColor(colors.YELLOW)
+        }
     }
 }
 
@@ -145,7 +148,7 @@ form.addEventListener("submit", function (event) {
     event.preventDefault()
     const title = inputTitle.value
     const description = inputDescription.value
-    controller.addNote(title, description, selectedColor)
+    controller.addNote(title, description)
 })
 
 const list = document.querySelector(".notes-list")
@@ -164,7 +167,7 @@ favoritesFilter.addEventListener("click", function (e) {
 
 
 radioButtons.addEventListener('click', function (e) {
-   selectedColor = e.target.value;
+    model.setSelectedColor(e.target.value)
 })
 
 
@@ -174,8 +177,8 @@ radioButtons.addEventListener('click', function (e) {
 
 
 const controller = {
-    addNote(title, description, color) {
-        model.addNote(title, description, color)
+    addNote(title, description) {
+        model.addNote(title, description)
     },
     deleteNotes(id) {
         model.deleteNotes(id)
